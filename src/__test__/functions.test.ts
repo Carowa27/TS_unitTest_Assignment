@@ -47,26 +47,30 @@ describe("addTodo", () => {
   });
 });
 
-test("should change status on todo item", () => {
-  //arrange, förutsättningar
-  let task: Todo = new Todo("handla", false);
-  //act, start av function
-  changeTodo(task);
-  //assert, förväntningar(received,expected)
-  expect(task.done).toBe(true);
+describe("changeTodo", () => {
+  test("should change status on todo item", () => {
+    //arrange, förutsättningar
+    let task: Todo = new Todo("handla", false);
+    //act, start av function
+    changeTodo(task);
+    //assert, förväntningar(received,expected)
+    expect(task.done).toBe(true);
+  });
 });
 
-test("should delete all todo items", () => {
-  //arrange, förutsättningar
-  let theList: Todo[] = [];
-  let firstTask: Todo = new Todo("handla", false);
-  let secondTask: Todo = new Todo("tvätta", false);
-  let thirdTask: Todo = new Todo("städa", false);
-  theList.push(firstTask);
-  theList.push(secondTask);
-  theList.push(thirdTask);
-  //act, start av function
-  removeAllTodos(theList);
-  //assert, förväntningar(received,expected)
-  expect(theList.length).toBe(0);
+describe("removeAllTodos", () => {
+  test("should delete all todo items", () => {
+    //arrange, förutsättningar
+    let theList: Todo[] = [];
+    let firstTask: Todo = new Todo("handla", false);
+    let secondTask: Todo = new Todo("tvätta", false);
+    let thirdTask: Todo = new Todo("städa", false);
+    theList.push(firstTask);
+    theList.push(secondTask);
+    theList.push(thirdTask);
+    //act, start av function
+    removeAllTodos(theList);
+    //assert, förväntningar(received,expected)
+    expect(theList.length).toBe(0);
+  });
 });
