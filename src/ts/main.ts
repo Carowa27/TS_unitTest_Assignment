@@ -4,6 +4,8 @@ import { Todo } from "./models/Todo";
 let todos: Todo[] = JSON.parse(localStorage.getItem("todos") || "[]");
 
 export function init() {
+  createHtml(todos);
+
   document.getElementById("clearTodos")?.addEventListener("click", () => {
     exports.clearTodos(todos);
   });
@@ -21,12 +23,29 @@ export function init() {
       exports.createNewTodo(todoText, todos);
     }
   );
+  document.getElementById("sortListBtn")?.addEventListener("click", () => {
+    exports.sortTask(todos);
+  });
 }
-
-window.onload = function () {
+window.addEventListener("load", () => {
+  // window.onload = function () {
   exports.init();
-  exports.createHtml(todos);
-};
+});
+
+export function sortTask(list: Todo[]) {
+  console.log("sortTask");
+  list.sort((a, b) => {
+    if (a.text.toUpperCase() < b.text.toUpperCase()) {
+      return -1;
+    }
+    if (a.text.toUpperCase() > b.text.toUpperCase()) {
+      return 1;
+    }
+
+    return 0;
+  });
+  createHtml(todos);
+}
 
 export function createNewTodo(todoText: string, todos: Todo[]) {
   let result = addTodo(todoText, todos);
@@ -57,7 +76,7 @@ export function createHtml(todos: Todo[]) {
     li.classList.add("todo__text");
     li.innerHTML = todos[i].text;
     li.addEventListener("click", () => {
-      toggleTodo(todos[i]);
+      exports.toggleTodo(todos[i]);
     });
 
     todosContainer.appendChild(li);

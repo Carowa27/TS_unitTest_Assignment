@@ -14,12 +14,12 @@ describe("init", () => {
     jest.restoreAllMocks();
   });
 
-  //testa localStorage.getItem???
   test("should start clearTodos with click", () => {
     console.log("test:should start clearTodos with click");
     //arrange
     let spy = jest.spyOn(mainFunctions, "clearTodos").mockReturnValue();
-    document.body.innerHTML = `<button type="button" id="clearTodos">Rensa lista</button>`;
+    document.body.innerHTML = `<button type="button" id="clearTodos">Rensa lista</button>
+    <ul id="todos" class="todo"></ul>`;
     mainFunctions.init();
     //act
     document.getElementById("clearTodos")?.click();
@@ -37,10 +37,25 @@ describe("init", () => {
       <button type="button" id="clearTodos">Rensa lista</button>
     </div>
     <div id="error" class="error"></div>
-  </form>`;
+  </form>
+  
+  <ul id="todos" class="todo"></ul>`;
     mainFunctions.init();
     //act
     document.getElementById("btnCreateTodo")?.click();
+    //assert
+    expect(spy).toHaveBeenCalled();
+  });
+
+  test("should sort list from a-z with click on btn", () => {
+    console.log("test:should sort list from a-z with click on btn");
+    //arrange
+    let spy = jest.spyOn(mainFunctions, "sortTask").mockReturnValue();
+    document.body.innerHTML = `<ul id="todos" class="todo"></ul><button type="button" id="sortListBtn">Sort list from A to Z</button>
+  `;
+    mainFunctions.init();
+    //act
+    document.getElementById("sortListBtn")?.click();
     //assert
     expect(spy).toHaveBeenCalled();
   });
@@ -51,15 +66,15 @@ describe("createNewTodo", () => {
     jest.resetModules();
     jest.restoreAllMocks();
   });
-  //   testa if
   test("should start function createHtml if todo is added successfully", () => {
     console.log(
       "should start function createHtml if todo is added successfully"
     );
-    // //arrange
+    //arrange
     let spy = jest.spyOn(mainFunctions, "createHtml").mockReturnValue();
     let watcher = jest.spyOn(mainFunctions, "displayError").mockReturnValue();
 
+    document.body.innerHTML = `<ul id="todos" class="todo"></ul>`;
     let task: string = "handla";
     let theList: Todo[] = [
       { text: "städa", done: false },
@@ -72,28 +87,7 @@ describe("createNewTodo", () => {
     //     assert
     expect(result.success).toBe(true);
     expect(spy).toHaveBeenCalled();
-    //arrange
-    // let theList: Todo[] = [
-    //   { text: "städa", done: false },
-    //   { text: "tvätta", done: false },
-    // ];
-    // document.body.innerHTML = `<ul id="todos" class="todo"></ul>`;
-    // let todosContainer: HTMLUListElement = document.getElementById(
-    //   "todos"
-    // ) as HTMLUListElement;
-    // todosContainer.innerHTML = "";
-    // let taskText: string = "handla";
-    // let result: IAddResponse = functions.addTodo(taskText, theList);
-    // let spy = jest.spyOn(mainFunctions, "createHtml").mockReturnValue();
-    // let watcher = jest.spyOn(mainFunctions, "displayError").mockReturnValue();
-    // mainFunctions.init();
-    // //act
-    // mainFunctions.createNewTodo(taskText, theList);
-    // //assert
-    // expect(result.success).toBe(true);
-    //expect(spy).toHaveBeenCalled();
   });
-  //   //testa else
   test("should start displayError if todo not added successfully", () => {
     console.log("should start displayError if todo not added successfully");
     //   arrange
@@ -117,23 +111,6 @@ describe("createHtml", () => {
     jest.resetModules();
     jest.restoreAllMocks();
   });
-  //testa localStorage.setItem
-  //     test("should setItem in localStorage", () => {
-  //       //arrange
-  // let spy = jest.spyOn(mainFunctions,"setItem").mockReturnValue;
-
-  //       let theList: Todo[] = [
-  //         { text: "städa", done: false },
-  //         { text: "tvätta", done: false },
-  //       ];
-
-  //       //act
-  //       mainFunctions.createHtml(theList);
-  //       //assert
-  //       console.log(theList.length);
-  //       expect(result.success).toBe(true);
-  //       //expect(spy).toHaveBeenCalled();
-  //     });
   //testa if
   test("should make list in HTML with done tasks", () => {
     console.log("test:should make list in HTML with done tasks");
@@ -155,7 +132,6 @@ describe("createHtml", () => {
       `<li class="todo__text--done todo__text">städa</li><li class="todo__text--done todo__text">tvätta</li>`
     );
   });
-  //testa else
   test("should make list in HTML with not done tasks", () => {
     console.log("test:should make list in HTML with not done tasks");
     //arrange
@@ -167,7 +143,6 @@ describe("createHtml", () => {
     let todosContainer: HTMLUListElement = document.getElementById(
       "todos"
     ) as HTMLUListElement;
-
     //act
     mainFunctions.createHtml(theList);
     //assert
@@ -176,36 +151,29 @@ describe("createHtml", () => {
       `<li class="todo__text">städa</li><li class="todo__text">tvätta</li>`
     );
   });
-  //testa addEventListener
-  //   test("should start toggleTodo function when li tag is clicked", () => {
-  //     console.log("should start toggleTodo function when li tag is clicked");
-  //     // //arrange
-  //     // let spy = jest.spyOn(mainFunctions, "toggleTodo").mockReturnValue();
-  //     // // let liTag: HTMLLIElement = document.getElementById(
-  //     // //   "liTag"
-  //     // // ) as HTMLLIElement;
-  //     let theList: Todo[] = [
-  //       { text: "städa", done: false },
-  //       { text: "tvätta", done: false },
-  //     ];
-  //     // document.body.innerHTML = `<ul id="todos" class="todo"><li id="liTag">test</li></ul>`;
-  //     // mainFunctions.createHtml(theList);
+  test("should start toggleTodo function when li tag is clicked", () => {
+    console.log("should start toggleTodo function when li tag is clicked");
+    //arrange
+    let spyDoneTasks = jest
+      .spyOn(mainFunctions, "toggleTodo")
+      .mockReturnValue();
 
-  //     // //act
-  //     // document.getElementById("liTag")?.click();
-  //     // //assert
-  //     // expect(spy).toHaveBeenCalled();
-  //     //arrange
-  //     let spy = jest.spyOn(mainFunctions, "toggleTodo").mockReturnValue();
-  //     document.body.innerHTML = `<ul id="todos" class="todo"></ul>`;
+    let theList: Todo[] = [
+      { text: "städa", done: false },
+      { text: "tvätta", done: false },
+    ];
+    document.body.innerHTML = `<ul id="todos" class="todo"></ul>`;
+    mainFunctions.createHtml(theList);
 
-  //     mainFunctions.createHtml(theList);
-  //     //act
-  //     document.getElementById("todo__text")?.click();
-  //     //assert
-  //     expect(theList[theList.length - 1].done).toBe(true);
-  //     //expect(spy).toHaveBeenCalled();
-  //   });
+    //act
+    let liTasks: HTMLElement = document.getElementsByClassName(
+      "todo__text"
+    )[0] as HTMLElement;
+    liTasks.click();
+
+    //assert
+    expect(spyDoneTasks).toHaveBeenCalledTimes(1);
+  });
 });
 
 describe("toggleTodo", () => {
@@ -300,7 +268,6 @@ describe("clearTodos", () => {
     console.log("test:should start function createHtml");
     // //arrange
     let spy = jest.spyOn(mainFunctions, "createHtml").mockReturnValue();
-    let watcher = jest.spyOn(functions, "removeAllTodos").mockReturnValue();
 
     let theList: Todo[] = [
       { text: "städa", done: false },
@@ -313,50 +280,27 @@ describe("clearTodos", () => {
   });
 });
 
-// describe("window onload????", () => {
-//   beforeEach(() => {
-//     jest.resetModules();
-//     jest.restoreAllMocks();
-//   });
-//   //testa att window onload startar init
-//   test("should start init function", () => {
-//     //arrange
-//     let spy = jest.spyOn(mainFunctions, "init").mockReturnValue();
-//     let watcher = jest.spyOn(mainFunctions, "createHtml").mockReturnValue();
+describe("sortTask", () => {
+  beforeEach(() => {
+    jest.resetModules();
+    jest.restoreAllMocks();
+  });
+  test("should sort list", () => {
+    console.log("test:should sort list");
+    //arrange
+    let watcher = jest.spyOn(mainFunctions, "createHtml").mockReturnValue();
 
-//     let theList: Todo[] = [
-//       { text: "städa", done: false },
-//       { text: "tvätta", done: false },
-//     ];
+    document.body.innerHTML = `<ul id="todos" class="todo"></ul>`;
 
-//     //act
-//     window.onload = function () {
-//       mainFunctions.init();
-//       mainFunctions.createHtml(theList);
-//     };
-//     //assert
-//     expect(spy).toHaveBeenCalled();
-//   });
-//   //testa att window onload startar createHtml
-//   test("should start init function", () => {
-//     //arrange
-//     let spy = jest.spyOn(mainFunctions, "init").mockReturnValue();
-//     let watcher = jest.spyOn(mainFunctions, "createHtml").mockReturnValue();
-
-//     document.body.innerHTML = "";
-
-//     let theList: Todo[] = [
-//       { text: "städa", done: false },
-//       { text: "tvätta", done: false },
-//     ];
-
-//     //act
-//     script.onload =
-//     window.onload = function () {
-//       mainFunctions.init();
-//       mainFunctions.createHtml(theList);
-//     };
-//     //assert
-//     expect(watcher).toHaveBeenCalled();
-//   });
-// });
+    let theList: Todo[] = [
+      { text: "städa", done: false },
+      { text: "städa", done: false },
+      { text: "tvätta", done: true },
+      { text: "handla", done: false },
+    ];
+    //act
+    mainFunctions.sortTask(theList);
+    //assert
+    expect(theList[0].text).toBe("handla");
+  });
+});
